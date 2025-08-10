@@ -33,7 +33,7 @@ tasks:
   download-async-profiler-macos:
     desc: "Install async-profiler (MacOS)"
     platforms:
-      - linux
+      - darwin
     vars:
       ASYNC_PROFILER_VERSION: "4.1"
       ASYNC_PROFILER_URL: "https://github.com/async-profiler/async-profiler/releases/download/v{{.ASYNC_PROFILER_VERSION}}/async-profiler-{{.ASYNC_PROFILER_VERSION}}-linux-x64.tar.gz"
