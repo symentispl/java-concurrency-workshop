@@ -55,7 +55,10 @@ tasks:
   build:
     desc: "Build all modules with Maven"
     cmds:
-      - ./mvnw --batch-mode --update-snapshots clean package
+      - cmd: ./mvnw --batch-mode --update-snapshots clean verify
+        platforms: [linux, darwin]
+      - cmd: cmd /c "mvnw.cmd --batch-mode --update-snapshots clean verify"
+        platforms: [windows]
     sources:
       - "pom.xml"
       - "*/pom.xml"
@@ -66,60 +69,30 @@ tasks:
       - "**/target/test-classes/**"
       - "{{.BENCHMARKS_JAR}}"
       - "{{.JCSTRESS_JAR}}"
-  run-benchmarks:
+  run-all-benchmarks:
     desc: "Run JMH benchmarks"
     deps:
       - build
     cmds:
       - java -jar {{.BENCHMARKS_JAR}} -wi 3 -i 5 -f 1
-  run-jcstress:
+  run-all-jcstress:
     desc: "Run JCStress concurrency tests"
     deps:
       - build
     cmds:
       - java -jar {{.JCSTRESS_JAR}}
-  run-specific-benchmark:
+  run-benchmark:
     desc: "Run a specific benchmark (usage: task run-specific-benchmark -- BenchmarkClassName)"
     deps:
       - build
     cmds:
       - java -jar {{.BENCHMARKS_JAR}} "{{.CLI_ARGS}}" -wi 3 -i 5 -f 1
-  run-pool-benchmarks:
-    desc: "Run Pool benchmarks"
-    deps:
-      - build
-    cmds:
-      - java -jar {{.BENCHMARKS_JAR}} "PoolBenchmark" -wi 3 -i 5 -f 1
-  run-actor-benchmarks:
-    desc: "Run Actor system benchmarks"
-    deps:
-      - build
-    cmds:
-      - java -jar {{.BENCHMARKS_JAR}} "ActorSystemBenchmark" -wi 3 -i 5 -f 1
-  run-array-benchmarks:
-    desc: "Run AppendOnly array benchmarks"
-    deps:
-      - build
-    cmds:
-      - java -jar {{.BENCHMARKS_JAR}} ".*Array.*Benchmark" -wi 3 -i 5 -f 1
-  run-jcstress-specific:
+  run-jcstress:
     desc: "Run specific JCStress tests (usage: task run-jcstress-specific -- TestPattern)"
     deps:
       - build
     cmds:
       - java -jar {{.JCSTRESS_JAR}} -t "{{.CLI_ARGS}}"
-  run-jcstress-pool:
-    desc: "Run JCStress tests for Pool implementation"
-    deps:
-      - build
-    cmds:
-      - java -jar {{.JCSTRESS_JAR}} -t ".*pool.*"
-  run-jcstress-actor:
-    desc: "Run JCStress tests for Actor system"
-    deps:
-      - build
-    cmds:
-      - java -jar {{.JCSTRESS_JAR}} -t ".*actor.*"
   profile-benchmarks:
     desc: "Profile benchmarks using async-profiler"
     deps:
