@@ -57,32 +57,20 @@ tasks:
       - "**/target/test-classes/**"
       - "{{.BENCHMARKS_JAR}}"
       - "{{.JCSTRESS_JAR}}"
-  run-all-benchmarks:
-    desc: "Run JMH benchmarks"
-    deps:
-      - build
-    cmds:
-      - java -jar {{.BENCHMARKS_JAR}} -wi 3 -i 5 -f 1
-  run-all-jcstress:
-    desc: "Run JCStress concurrency tests"
-    deps:
-      - build
-    cmds:
-      - java -jar {{.JCSTRESS_JAR}}
-  run-benchmark:
-    desc: "Run a specific benchmark (usage: task run-specific-benchmark -- BenchmarkClassName)"
+  run-benchmarks:
+    desc: "Run benchmarks (use '-- [benchmark name]' to run selected benchmarks)"
     deps:
       - build
     cmds:
       - java -jar {{.BENCHMARKS_JAR}} "{{.CLI_ARGS}}" -wi 3 -i 5 -f 1
   run-jcstress:
-    desc: "Run specific JCStress tests (usage: task run-jcstress-specific -- TestPattern)"
+    desc: "Run specific JCStress tests (usage: task run-jcstress -- TestPattern)"
     deps:
       - build
     cmds:
       - java -jar {{.JCSTRESS_JAR}} -t "{{.CLI_ARGS}}"
   profile-benchmarks:
-    desc: "Profile benchmarks using async-profiler"
+    desc: "Profile benchmarks using async-profiler (of JFR under Windows) (use '-- [benchmark name]' to run selected benchmarks)"
     deps:
       - download-async-profiler
       - build
