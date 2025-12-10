@@ -68,7 +68,7 @@ tasks:
     deps:
       - build
     cmds:
-      - java -jar {{.JCSTRESS_JAR}} -t "{{.CLI_ARGS}}"
+      - java -jar {{.JCSTRESS_JAR}} -c 4 -m quick -time 100 -t "{{.CLI_ARGS}}"
   profile-benchmarks:
     desc: "Profile benchmarks using async-profiler (of JFR under Windows) (use '-- [benchmark name]' to run selected benchmarks)"
     deps:
